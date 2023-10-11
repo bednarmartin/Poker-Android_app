@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="fragment"
+            type="com.example.poker.PlayerFragment" />
+
+        <variable
+            name="sharedViewModel"
+            type="com.example.poker.SharedFragmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".PlayerFragment">
+
+
+        <Button
+            android:id="@+id/btnShowCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:onClick="@{() -> fragment.onChangeVisibility()}"
+            android:text="@{sharedViewModel.areCardsVisible ? @string/hide_cards : @string/show_cards }"
+            app:layout_constraintBottom_toTopOf="@+id/btnCall"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnFold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{() -> fragment.fold()}"
+            android:clickable="@{!sharedViewModel.showWinner}"
+            android:text="@string/fold"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCheck"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnCheck"
+            app:layout_constraintTop_toTopOf="@+id/btnCheck" />
+
+        <Button
+            android:id="@+id/btnCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:clickable="@{(!sharedViewModel.showWinner &amp; sharedViewModel.actualPlayer.bet == sharedViewModel.otherPlayer.bet) || sharedViewModel.actualPlayerMoney == 0 || sharedViewModel.otherPlayer.money == 0}"
+            android:onClick="@{() -> fragment.check()}"
+            android:text="@string/check"
+            app:layout_constraintBottom_toBottomOf="@+id/btnRaise"
+            app:layout_constraintEnd_toStartOf="@+id/btnFold"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnRaise"
+            app:layout_constraintTop_toTopOf="@+id/btnRaise" />
+
+        <Button
+            android:id="@+id/btnRaise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:clickable="@{!sharedViewModel.showWinner &amp;sharedViewModel.actualPlayer.money != 0  &amp; sharedViewModel.actualPlayerMoney != 0}"
+            android:onClick="@{() -> fragment.raise()}"
+            android:text="@string/raise"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCall"
+            app:layout_constraintEnd_toStartOf="@+id/btnCheck"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnCall"
+            app:layout_constraintTop_toTopOf="@+id/btnCall" />
+
+        <Button
+            android:id="@+id/btnCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="@{!sharedViewModel.showWinner &amp;sharedViewModel.actualPlayer.bet != sharedViewModel.otherPlayer.bet  &amp; sharedViewModel.actualPlayerMoney != 0 }"
+            android:onClick="@{() -> fragment.call()}"
+            android:text="@string/call"
+            app:layout_constraintBottom_toTopOf="@+id/playerTextView"
+            app:layout_constraintEnd_toStartOf="@+id/btnRaise"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/playerCard1ImageView"
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:src="@{sharedViewModel.playerCard1Drawable}"
+            android:visibility="@{sharedViewModel.areCardsVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/myBetTextView"
+            app:layout_constraintEnd_toStartOf="@+id/playerCard2ImageView"
+            app:layout_constraintStart_toStartOf="@+id/btnShowCards" />
+
+        <ImageView
+            android:id="@+id/playerCard2ImageView"
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:src="@{sharedViewModel.playerCard2Drawable}"
+            android:visibility="@{sharedViewModel.areCardsVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/myBetTextView"
+            app:layout_constraintEnd_toEndOf="@+id/btnShowCards"
+            app:layout_constraintStart_toEndOf="@+id/playerCard1ImageView" />
+
+        <TextView
+            android:id="@+id/playerMoneyTextView"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@{`Money: ` + sharedViewModel.actualPlayerMoney  + `€`}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/playerTextView"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@{sharedViewModel.actualPlayer.toString()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/myBetTextView"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@{`My Bet: ` + sharedViewModel.actualPlayerBet  + `€`}"
+            app:layout_constraintBottom_toTopOf="@+id/btnShowCards"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/otherPlayersBetTextView"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@{`Other Player's Bet: ` + sharedViewModel.otherPlayerBet  + `€`}"
+            app:layout_constraintBottom_toTopOf="@+id/btnShowCards"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

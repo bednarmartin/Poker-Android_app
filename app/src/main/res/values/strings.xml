@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Poker</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_game">New Game</string>
+    <string name="check">Check</string>
+    <string name="raise">Raise</string>
+    <string name="call">Call</string>
+    <string name="fold">Fold</string>
+    <string name="show_cards">Show Cards</string>
+    <string name="hide_cards">Hide Cards</string>
+</resources>

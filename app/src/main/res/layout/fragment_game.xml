@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="fragment"
+            type="com.example.poker.GameFragment" />
+
+        <variable
+            name="sharedViewModel"
+            type="com.example.poker.SharedFragmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".GameFragment">
+
+
+        <ImageView
+            android:id="@+id/card1ImageView"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:src="@{sharedViewModel.cardOnDesk1Drawable}"
+            android:visibility="@{sharedViewModel.isTheFlop() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/card2ImageView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/card2ImageView"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@{sharedViewModel.cardOnDesk2Drawable}"
+            android:visibility="@{sharedViewModel.isTheFlop() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/card1ImageView"
+            app:layout_constraintEnd_toStartOf="@+id/card3ImageView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/card1ImageView"
+            app:layout_constraintTop_toTopOf="@+id/card1ImageView" />
+
+        <ImageView
+            android:id="@+id/card3ImageView"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="16dp"
+            android:src="@{sharedViewModel.cardOnDesk3Drawable}"
+            android:visibility="@{sharedViewModel.isTheFlop() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/card2ImageView"
+            app:layout_constraintEnd_toStartOf="@+id/card4ImageView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/card2ImageView"
+            app:layout_constraintTop_toTopOf="@+id/card2ImageView" />
+
+        <ImageView
+            android:id="@+id/card4ImageView"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="16dp"
+            android:src="@{sharedViewModel.cardOnDesk4Drawable}"
+            android:visibility="@{sharedViewModel.isTheTurn() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/card3ImageView"
+            app:layout_constraintEnd_toStartOf="@+id/card5ImageView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/card3ImageView"
+            app:layout_constraintTop_toTopOf="@+id/card3ImageView" />
+
+        <ImageView
+            android:id="@+id/card5ImageView"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="16dp"
+            android:src="@{sharedViewModel.cardOnDesk5Drawable}"
+            android:visibility="@{sharedViewModel.isTheRiver() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/card4ImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/card4ImageView"
+            app:layout_constraintTop_toTopOf="@+id/card4ImageView" />
+
+        <Button
+            android:id="@+id/newGameButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="@{() -> sharedViewModel.newGame()}"
+            android:text="@string/new_game"
+            android:visibility="@{sharedViewModel.showWinner ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/winnerTextView"
+            app:layout_constraintStart_toStartOf="@+id/winnerTextView"
+            app:layout_constraintTop_toBottomOf="@+id/winnerTextView" />
+
+        <TextView
+            android:id="@+id/winnerTextView"
+            style="@style/TextAppearance.Material3.HeadlineLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{sharedViewModel.showWinner ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@{sharedViewModel.theWinner == 1 ? `Player 1 won!` : sharedViewModel.theWinner == 2 ? `Player 2 won!` : `Tie!` }" />
+
+        <TextView
+            android:id="@+id/betTextView"
+            style="@style/TextAppearance.Material3.HeadlineLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@{sharedViewModel.actualBet + `€`}"
+            app:layout_constraintBottom_toTopOf="@+id/newGameButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card3ImageView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
